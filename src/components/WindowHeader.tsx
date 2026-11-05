@@ -1,5 +1,6 @@
-import React from 'react';
-import { ShieldCheck, HardDrive, RefreshCw, PlusCircle, Search, Laptop } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, HardDrive, RefreshCw, PlusCircle, Search, Laptop, Download, Check } from 'lucide-react';
+import { downloadWpfProjectZip } from '../utils/zipGenerator';
 
 interface WindowHeaderProps {
   totalDrives: number;
@@ -22,6 +23,19 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
   onAddDevice,
   isRefreshing
 }) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadSuccess, setDownloadSuccess] = useState(false);
+
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    const success = await downloadWpfProjectZip();
+    setIsDownloading(false);
+    if (success) {
+      setDownloadSuccess(true);
+      setTimeout(() => setDownloadSuccess(false), 3000);
+    }
+  };
+
   return (
     <header className="bg-[#0b0e17] border-b border-[#1b2234] px-4 py-2.5 flex items-center justify-between gap-4 select-none">
       {/* Brand & UAC Shield */}
@@ -76,9 +90,29 @@ export const WindowHeader: React.FC<WindowHeaderProps> = ({
 
       {/* Actions & Window Controls */}
       <div className="flex items-center gap-2 shrink-0">
+        {/* Direct Download ZIP Button */}
+        <button
+          onClick={handleDownload}
+          disabled={isDownloading}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white text-xs font-bold rounded-lg shadow-sm transition-all whitespace-nowrap"
+          title="Unduh seluruh file proyek C# WPF .NET 8 dalam bentuk ZIP untuk dijalankan di Windows"
+        >
+          {downloadSuccess ? (
+            <>
+              <Check className="w-3.5 h-3.5 text-emerald-300" />
+              <span>ZIP Terunduh!</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-3.5 h-3.5" />
+              <span>{isDownloading ? 'Menyiapkan...' : 'Download ZIP Windows'}</span>
+            </>
+          )}
+        </button>
+
         <button
           onClick={onAddDevice}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#172133] hover:bg-[#1f2d45] border border-[#273652] text-xs font-medium text-slate-200 rounded-lg transition-colors whitespace-nowrap"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#172133] hover:bg-[#1f2d45] border border-[#273652] text-xs font-medium text-slate-200 rounded-lg transition-colors whitespace-nowrap hidden sm:flex"
           title="Simulasi tancapkan perangkat USB atau Hardisk baru"
         >
           <PlusCircle className="w-3.5 h-3.5 text-blue-400" />

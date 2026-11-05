@@ -806,6 +806,132 @@ if %ERRORLEVEL% equ 0 (
 pause`
   },
   {
+    path: 'BitLockerAdminPro/Install-and-Run.bat',
+    name: 'Install-and-Run.bat',
+    language: 'batch',
+    category: 'Build Scripts',
+    content: `@echo off
+title BitLocker Administrator Pro - Installer & Launcher
+color 0B
+echo ==========================================================
+echo       BITLOCKER ADMINISTRATOR PRO - WINDOWS INSTALLER     
+echo ==========================================================
+echo.
+
+:: Cek Administrator Privileges
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [PERINGATAN] Script ini sebaiknya dijalankan sebagai Administrator.
+    echo Klik kanan file ini lalu pilih 'Run as administrator'.
+    echo.
+)
+
+where dotnet >nul 2>&1
+if %errorLevel% neq 0 (
+    echo [INFO] .NET 8 SDK belum terpasang.
+    echo Membuka link download resmi Microsoft .NET 8 Desktop Runtime...
+    start https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+    echo.
+    echo Setelah menginstal .NET 8, jalankan kembali file ini.
+    pause
+    exit /b
+)
+
+echo [1/2] Mengompilasi aplikasi BitLocker Administrator Pro (.NET 8)...
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "%~dp0publish"
+
+if %errorLevel% equ 0 (
+    echo.
+    echo [2/2] Membuat Shortcut di Desktop Windows...
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0Install-Shortcut.ps1"
+    
+    echo.
+    echo ==========================================================
+    echo  INSTALASI SELESAI!
+    echo  File .EXE: %~dp0publish\\BitLockerAdminPro.exe
+    echo  Shortcut telah dibuat di Desktop Windows Anda.
+    echo ==========================================================
+    echo.
+    set /p launch="Apakah Anda ingin langsung menjalankan aplikasi sekarang? (Y/N): "
+    if /i "%launch%"=="Y" (
+        start "" "%~dp0publish\\BitLockerAdminPro.exe"
+    )
+) else (
+    echo.
+    echo [ERROR] Gagal mengompilasi. Pastikan .NET 8 SDK terpasang dengan benar.
+)
+pause`
+  },
+  {
+    path: 'BitLockerAdminPro/Install-Shortcut.ps1',
+    name: 'Install-Shortcut.ps1',
+    language: 'powershell',
+    category: 'Build Scripts',
+    content: `# Script PowerShell untuk membuat Shortcut Desktop dengan hak Administrator
+$WshShell = New-Object -ComObject WScript.Shell
+$DesktopPath = [System.Environment]::GetFolderPath('Desktop')
+$TargetPath = Join-Path $PSScriptRoot "publish\\BitLockerAdminPro.exe"
+
+if (Test-Path $TargetPath) {
+    $ShortcutPath = Join-Path $DesktopPath "BitLocker Administrator Pro.lnk"
+    $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
+    $Shortcut.TargetPath = $TargetPath
+    $Shortcut.WorkingDirectory = (Split-Path $TargetPath)
+    $Shortcut.Description = "BitLocker Administrator Pro - Windows Storage Security Suite"
+    $Shortcut.Save()
+    Write-Host "[OK] Shortcut berhasil dibuat di Desktop: $ShortcutPath" -ForegroundColor Green
+} else {
+    Write-Host "[INFO] File executable belum dibangun. Jalankan build.bat terlebih dahulu." -ForegroundColor Yellow
+}`
+  },
+  {
+    path: 'BitLockerAdminPro/PETUNJUK_INSTALASI_WINDOWS.txt',
+    name: 'PETUNJUK_INSTALASI_WINDOWS.txt',
+    language: 'text',
+    category: 'Documentation',
+    content: `================================================================================
+           PANDUAN INSTALASI & MENJALANKAN DI WINDOWS 10 / WINDOWS 11
+================================================================================
+
+Terima kasih telah mengunduh BitLocker Administrator Pro.
+Berikut adalah langkah paling mudah untuk langsung memasang dan menjalankannya di Windows:
+
+--------------------------------------------------------------------------------
+CARA 1: INSTALASI 1-KLIK (SANGAT MUDAH)
+--------------------------------------------------------------------------------
+1. Ekstrak file ZIP ini ke folder pilihan Anda (misalnya di C:\\BitLockerAdminPro atau Desktop).
+2. Klik kanan file "Install-and-Run.bat".
+3. Pilih "Run as administrator".
+4. Script akan otomatis:
+   - Memeriksa .NET 8
+   - Mengompilasi aplikasi menjadi file standalone BitLockerAdminPro.exe
+   - Membuat shortcut di Desktop Windows Anda
+5. Aplikasi langsung siap digunakan!
+
+--------------------------------------------------------------------------------
+CARA 2: COMPILE MANUAL DENGAN TERMINAL / CMD
+--------------------------------------------------------------------------------
+1. Buka Command Prompt atau PowerShell di dalam folder ini.
+2. Jalankan perintah berikut:
+   dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
+3. File .exe akan berada di: ./publish/BitLockerAdminPro.exe
+4. Klik kanan BitLockerAdminPro.exe -> "Run as administrator".
+
+--------------------------------------------------------------------------------
+CARA 3: MENGGUNAKAN VISUAL STUDIO 2022
+--------------------------------------------------------------------------------
+1. Buka file "BitLockerAdminPro.csproj" dengan Visual Studio 2022.
+2. Pilih konfigurasi Release | Any CPU atau x64.
+3. Tekan tombol F5 atau Build Solution (Ctrl+Shift+B).
+
+--------------------------------------------------------------------------------
+CATATAN KEAMANAN WINDOWS:
+--------------------------------------------------------------------------------
+- Aplikasi ini memerlukan hak Administrator karena utilitas resmi Windows
+  manage-bde.exe memerlukan elevasi hak akses untuk berinteraksi dengan volume disk.
+- File app.manifest sudah otomatis mengatur prompt UAC (User Account Control).`
+  },
+  {
     path: 'BitLockerAdminPro/README.md',
     name: 'README.md',
     language: 'markdown',

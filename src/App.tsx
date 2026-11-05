@@ -19,6 +19,8 @@ import { WpfSourceCodeView } from './components/WpfSourceCodeView';
 import { HelpManualView } from './components/HelpManualView';
 import { NewDeviceModal } from './components/NewDeviceModal';
 import { NotificationToast, ToastMessage } from './components/NotificationToast';
+import { InstallGuideModal } from './components/InstallGuideModal';
+import { Download, Sparkles, FolderArchive, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [drives, setDrives] = useState<DriveItem[]>(INITIAL_DRIVES);
@@ -31,6 +33,7 @@ export default function App() {
   const [unlockDrive, setUnlockDrive] = useState<DriveItem | null>(null);
   const [decryptDrive, setDecryptDrive] = useState<DriveItem | null>(null);
   const [isNewDeviceModalOpen, setIsNewDeviceModalOpen] = useState(false);
+  const [isInstallGuideOpen, setIsInstallGuideOpen] = useState(false);
 
   // Terminal initial preset command
   const [terminalCmd, setTerminalCmd] = useState<string | undefined>(undefined);
@@ -331,7 +334,46 @@ export default function App() {
 
         {/* Content Viewport */}
         <main className="flex-1 flex overflow-hidden bg-[#080a10]">
-          <div className="flex-1 overflow-y-auto p-4 md:p-6">
+          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+            {/* Direct Windows ZIP Download Announcement Banner */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-950/40 via-blue-950/30 to-[#0e1424] border border-purple-500/40 shadow-xl flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 shrink-0">
+                  <FolderArchive className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-sm font-bold text-white">
+                      Paket Siap Pasang Windows (.NET 8 WPF)
+                    </h3>
+                    <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-purple-900/60 text-purple-300 border border-purple-500/30">
+                      ZIP
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Unduh file ZIP lengkap berisi installer otomatis <code className="text-purple-300 font-mono">Install-and-Run.bat</code>, shortcut Desktop, dan source code C# siap pakai di Windows 10/11.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => setIsInstallGuideOpen(true)}
+                  className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-[#161d2d] hover:bg-[#1e273d] border border-[#273652] transition-colors"
+                >
+                  Cara Pasang di Windows
+                </button>
+                <a
+                  href="/BitLockerAdministratorPro-Windows.zip"
+                  download="BitLockerAdministratorPro-Windows.zip"
+                  className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-purple-950/50 transition-all"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>Download File ZIP</span>
+                </a>
+              </div>
+            </div>
+
             {activeTab === 'drives' && (
               <DriveList
                 drives={drives}
@@ -425,6 +467,12 @@ export default function App() {
         onClose={() => setIsNewDeviceModalOpen(false)}
         onAddDrive={handleAddDevice}
         existingLetters={drives.map(d => d.letter)}
+      />
+
+      {/* Windows Install Guide Modal */}
+      <InstallGuideModal
+        isOpen={isInstallGuideOpen}
+        onClose={() => setIsInstallGuideOpen(false)}
       />
 
       {/* Toast Alert Notifications */}

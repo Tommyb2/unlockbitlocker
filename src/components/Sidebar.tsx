@@ -188,6 +188,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
+      {/* Direct Windows ZIP Download Action Card */}
+      <div className="p-3 border-t border-[#1b2234] bg-[#0c101a]">
+        <a
+          href="/BitLockerAdministratorPro-Windows.zip"
+          download="BitLockerAdministratorPro-Windows.zip"
+          className="flex items-center justify-between p-2.5 rounded-xl bg-purple-600/15 hover:bg-purple-600/25 border border-purple-500/30 text-purple-200 transition-all group"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+              <Code2 className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <div className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+                Download ZIP Windows
+              </div>
+              <div className="text-[10px] text-slate-400">
+                Installer .BAT + Source WPF
+              </div>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono text-purple-400 bg-purple-950/80 px-1.5 py-0.5 rounded border border-purple-500/30">
+            ZIP
+          </span>
+        </a>
+      </div>
+
       {/* System Status Footprint */}
       <div className="p-3 border-t border-[#1b2234] bg-[#090c14]">
         <div className="flex items-center gap-2.5">

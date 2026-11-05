@@ -61,6 +61,38 @@ export const DriveList: React.FC<DriveListProps> = ({
 
   return (
     <div className="space-y-4">
+      {/* Notice Banner: Browser Sandbox vs Windows Desktop .EXE */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/40 via-purple-950/30 to-[#111622] border border-blue-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 select-none">
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0 mt-0.5">
+            <HardDrive className="w-5 h-5 text-blue-400" />
+          </div>
+          <div>
+            <h3 className="text-xs font-bold text-white flex items-center gap-2">
+              <span>Mengapa Website di Vercel / Browser Belum Membaca Drive Laptop Anda?</span>
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-500/30">
+                PENTING
+              </span>
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed mt-1 max-w-3xl">
+              Vercel adalah server cloud di internet, dan browser web memiliki perlindungan keamanan (<em>sandbox</em>) yang melarang website membaca hardisk/USB laptop Anda. 
+              Agar dapat membuka kunci dan mendekripsi drive fisik laptop Anda yang sebenarnya, <strong>unduh paket C# .NET 8 WPF</strong> lalu jalankan sebagai program desktop (<strong>.exe</strong>) dengan hak akses Administrator di laptop Anda!
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 w-full md:w-auto">
+          <a
+            href="/BitLockerAdministratorPro-Windows.zip"
+            download="BitLockerAdministratorPro-Windows.zip"
+            className="flex-1 md:flex-initial flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 active:bg-purple-700 text-white text-xs font-bold rounded-xl shadow-md transition-all whitespace-nowrap"
+          >
+            <ShieldCheck className="w-4 h-4 text-purple-200" />
+            <span>Download ZIP Proyek Windows</span>
+          </a>
+        </div>
+      </div>
+
       {/* Top Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="p-3 rounded-xl bg-[#111622] border border-[#1e273a] flex items-center justify-between">
