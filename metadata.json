@@ -1,0 +1,6 @@
+{
+  "name": "BitLocker Administrator Pro",
+  "description": "Aplikasi Windows Desktop profesional untuk mengelola, membuka kunci, menonaktifkan enkripsi, dan menghapus proteksi BitLocker pada perangkat penyimpanan internal dan eksternal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
